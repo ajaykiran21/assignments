@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .h1 {
+      display: block;
+      text-align: center;
+      color: brown;
+      background-color: darkcyan;
+      position: relative;
+      border: solid;
+      margin-top: 30vh;
+    }
+    .input {
+      border: solid;
+      width: 30%;
+      height: 5vh;
+      border-radius: 20px;
+      margin-left: 30vw;
+      margin-top: 20px;
+    }
+  </style>
+  <body>
+    <h1 class="h1">Todo List</h1>
+    <form>
+      <input
+        type="text"
+        placeholder="Enter Todo items"
+        id="list"
+        class="input"
+        required
+      />
+      <button onclick="clickMe()">click</button>
+      <ul id="display"></ul>
+    </form>
+    <script>
+      function clickMe() {
+        const input = document.getElementById("list").value;
+        const todoArray = [];
+
+        todoArray.push(input);
+
+        const element = document.createElement("li");
+        element.innerText = todoArray[0];
+        document.getElementById("display").appendChild(element);
+
+        document.getElementById("list").value = "";
+      }
+    </script>
+  </body>
+</html>
