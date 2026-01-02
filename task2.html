@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fetch Test</title>
+    <style>
+      #div {
+        margin-top: 40px;
+        border: none;
+        background-color: antiquewhite;
+        margin-left: 500px;
+        color: brown;
+        width: 200px;
+      }
+      button {
+        width: 200px;
+        height: 100px;
+        color: black;
+        background-color: rgb(33, 138, 202);
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="hello()">Click</button>
+    <div id="div"></div>
+    <script>
+      async function hello() {
+        try {
+          const response = await fetch(
+            "https://api.spacexdata.com/v4/launches/latest"
+          );
+          const final_val = await response.json();
+          console.log(final_val);
+          // display Mission Info
+
+          document.getElementById("div").innerText = "fetching....";
+          const element2 = document.createElement("div");
+          element2.classList.add("div");
+          function late() {
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                document.getElementById("div").innerHTML = "";
+                element2.innerHTML = `<h2>Mission Information </h2>
+          Name of the Mission: ${final_val.name}
+          <br>
+          date_utc: ${final_val.date_utc}
+          <br>
+          Flight Number : ${final_val.flight_number}
+          <br>
+          Status: ${final_val.success}<br>
+          <img src= "${final_val.links.patch.small}" height="200px" width="200px"/>`;
+
+                document.getElementById("div").appendChild(element2);
+                resolve();
+              }, 2000);
+            });
+          }
+          await late();
+
+          setTimeout(() => {
+            document.getElementById("div").innerHTML = "Completed.";
+          }, 1000);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    </script>
+  </body>
+</html>
