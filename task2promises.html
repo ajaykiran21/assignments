@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="clicked()">Click me</button>
+    <div id="div"></div>
+  </body>
+  <script>
+    function clicked() {
+      fetch("https://api.spacexdata.com/v4/launches/latest")
+        .then((resp) => resp.json())
+        .then((val) => {
+          document.getElementById(
+            "div"
+          ).innerHTML = `<h2>Mission Information </h2>
+          Name of the Mission: ${val.name}
+          <br>
+          date_utc: ${val.date_utc}
+          <br>
+          Flight Number : ${val.flight_number}
+          <br>
+          Status: ${val.success}<br>
+          <img src= "${val.links.patch.small}" height="200px" width="200px"/>`;
+
+          //   document.getElementById("div").appendChild(div);
+        });
+    }
+  </script>
+</html>
