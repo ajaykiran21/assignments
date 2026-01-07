@@ -1,0 +1,286 @@
+SQL> select * from emp;
+
+    EMP_ID EMP_NAME                  JOB_TITLE                 HIRE_DATE     SALARY MANAGER_ID    DEPT_ID
+---------- ------------------------- ------------------------- --------- ---------- ---------- ----------
+      1001 Arun Kumar                IT Manager                09-JUN-21      90000                    10
+      1002 Divya Sharma              HR Executive              10-JAN-22      52000       1006         20
+      1003 Mubeen Ali                Senior Developer          20-MAR-23      85000       1001         10
+      1004 Ravi Iyer                 Accountant                18-JUL-20      60000       1007         30
+      1005 Anita Verma               Sales Executive           12-SEP-22      48000       1008         40
+      1006 Kumar Singh               HR Manager                05-NOV-20      78000                    20
+      1007 Meera Nair                Finance Manager           22-APR-19      82000                    30
+      1008 Sameer Khan               Sales Manager             14-FEB-21      80000                    40
+      1009 Priya Das                 Support Engineer          05-JAN-24      45000       1001         50
+      1010 John Contractor           Consultant                01-JUN-24      70000       1001
+
+10 rows selected.
+
+SQL> select * from dept;
+
+   DEPT_ID DEPT_NAME       LOCATION
+---------- --------------- ------------------------------
+        10 IT              Chennai
+        20 HR              Bengaluru
+        30 Finance         Mumbai
+        40 Sales           Delhi
+        50 Support         Hyderabad
+        60 RR&D            Pune
+
+6 rows selected.
+
+SQL> select * from sal_grade;
+
+GR    MIN_SAL    MAX_SAL
+-- ---------- ----------
+G1          0      49999
+G2      50000      69999
+G3      70000      89999
+G4      90000     120000
+
+SQL> select * from emp_project;
+
+    EMP_ID PROJECT_ID ROLE_NAME                                ALLOCATION_PCT ASSIGN_DA
+---------- ---------- ---------------------------------------- -------------- ---------
+      1001        504 Project Lead                                         60 20-JAN-25
+      1003        504 Developer                                            80 01-FEB-25
+      1006        502 Project Lead                                         50 01-FEB-25
+      1002        502 HR Analyst                                           70 10-FEB-25
+      1008        503 Project Lead                                         40 10-MAR-25
+      1005        503 Sales SME                                            60 15-MAR-25
+      1007        501 Project Lead                                         50 15-JAN-25
+      1004        501 Accountant SME                                       50 20-JAN-25
+      1009        505 Support SME                                          70 05-APR-25
+
+9 rows selected.
+
+
+SQL> select e.emp_id, e.emp_name, e.dept_id, d.location from emp e left join dept d on e.dept_id = d.dept_id;
+
+    EMP_ID EMP_NAME                     DEPT_ID LOCATION
+---------- ------------------------- ---------- ------------------------------
+      1001 Arun Kumar                        10 Chennai
+      1003 Mubeen Ali                        10 Chennai
+      1002 Divya Sharma                      20 Bengaluru
+      1006 Kumar Singh                       20 Bengaluru
+      1004 Ravi Iyer                         30 Mumbai
+      1007 Meera Nair                        30 Mumbai
+      1005 Anita Verma                       40 Delhi
+      1008 Sameer Khan                       40 Delhi
+      1009 Priya Das                         50 Hyderabad
+      1010 John Contractor
+
+10 rows selected.
+
+SQL>  select e.emp_id , p.project_id,p.role_name from emp e join emp_project p on e.emp_id = p.emp_id;
+
+    EMP_ID PROJECT_ID ROLE_NAME
+---------- ---------- ----------------------------------------
+      1001        504 Project Lead
+      1003        504 Developer
+      1006        502 Project Lead
+      1002        502 HR Analyst
+      1008        503 Project Lead
+      1005        503 Sales SME
+      1007        501 Project Lead
+      1004        501 Accountant SME
+      1009        505 Support SME
+
+9 rows selected.
+
+SQL> select project_id,role_name, emp_name from emp left join emp_project on emp.emp_id = emp_project.emp_id;
+
+PROJECT_ID ROLE_NAME                                EMP_NAME
+---------- ---------------------------------------- -------------------------
+       504 Project Lead                             Arun Kumar
+       504 Developer                                Mubeen Ali
+       502 Project Lead                             Kumar Singh
+       502 HR Analyst                               Divya Sharma
+       503 Project Lead                             Sameer Khan
+       503 Sales SME                                Anita Verma
+       501 Project Lead                             Meera Nair
+       501 Accountant SME                           Ravi Iyer
+       505 Support SME                              Priya Das
+                                                    John Contractor
+
+10 rows selected.
+
+SQL> select emp_name, dept_name from emp left join dept on emp.dept_id = dept.dept_id;
+
+EMP_NAME                  DEPT_NAME
+------------------------- ---------------
+Arun Kumar                IT
+Mubeen Ali                IT
+Divya Sharma              HR
+Kumar Singh               HR
+Ravi Iyer                 Finance
+Meera Nair                Finance
+Anita Verma               Sales
+Sameer Khan               Sales
+Priya Das                 Support
+John Contractor
+
+10 rows selected.
+
+SQL> select emp_name, dept_name from emp full outer  join dept on emp.dept_id = dept.dept_id;
+
+EMP_NAME                  DEPT_NAME
+------------------------- ---------------
+Arun Kumar                IT
+Divya Sharma              HR
+Mubeen Ali                IT
+Ravi Iyer                 Finance
+Anita Verma               Sales
+Kumar Singh               HR
+Meera Nair                Finance
+Sameer Khan               Sales
+Priya Das                 Support
+John Contractor
+                          RR&D
+
+11 rows selected.
+
+
+
+SQL> select e.emp_id,e.emp_name , m.manger_id from emp e  join emp m on e.emp_id = m.emp_id;
+select e.emp_id,e.emp_name , m.manger_id from emp e  join emp m on e.emp_id = m.emp_id
+                             *
+ERROR at line 1:
+ORA-00904: "M"."MANGER_ID": invalid identifier
+
+
+SQL> select e.emp_id,e.emp_name , m.manager_id from emp e  join emp m on e.emp_id = m.manager_id;
+
+    EMP_ID EMP_NAME                  MANAGER_ID
+---------- ------------------------- ----------
+      1006 Kumar Singh                     1006
+      1001 Arun Kumar                      1001
+      1007 Meera Nair                      1007
+      1008 Sameer Khan                     1008
+      1001 Arun Kumar                      1001
+      1001 Arun Kumar                      1001
+
+6 rows selected.
+
+SQL> select e.emp_id,e.emp_name , m.manager_id from emp e  full outer join emp m on e.emp_id = m.manager_id;
+
+    EMP_ID EMP_NAME                  MANAGER_ID
+---------- ------------------------- ----------
+
+      1006 Kumar Singh                     1006
+      1001 Arun Kumar                      1001
+      1007 Meera Nair                      1007
+      1008 Sameer Khan                     1008
+
+
+
+      1001 Arun Kumar                      1001
+      1001 Arun Kumar                      1001
+      1009 Priya Das
+      1004 Ravi Iyer
+      1010 John Contractor
+      1002 Divya Sharma
+      1005 Anita Verma
+      1003 Mubeen Ali
+
+16 rows selected.
+
+SQL> select e.emp_id,e.emp_name , m.manager_id from emp e  full outer join emp m on e.emp_id = m.emp_id;
+
+    EMP_ID EMP_NAME                  MANAGER_ID
+---------- ------------------------- ----------
+      1001 Arun Kumar
+      1002 Divya Sharma                    1006
+      1003 Mubeen Ali                      1001
+      1004 Ravi Iyer                       1007
+      1005 Anita Verma                     1008
+      1006 Kumar Singh
+      1007 Meera Nair
+      1008 Sameer Khan
+      1009 Priya Das                       1001
+      1010 John Contractor                 1001
+
+10 rows selected.
+
+SQL> select e.emp_name, e.salary , s.grade from emp e join sal_grade s on e.salary between s.min_sal and s.max_sal;
+
+EMP_NAME                      SALARY GR
+------------------------- ---------- --
+Anita Verma                    48000 G1
+Priya Das                      45000 G1
+Divya Sharma                   52000 G2
+Ravi Iyer                      60000 G2
+Mubeen Ali                     85000 G3
+Kumar Singh                    78000 G3
+Meera Nair                     82000 G3
+Sameer Khan                    80000 G3
+John Contractor                70000 G3
+Arun Kumar                     90000 G4
+
+10 rows selected.
+
+SQL> select e.emp_name, d.dept_name from emp e cross join dept d;
+
+EMP_NAME                  DEPT_NAME
+------------------------- ---------------
+Arun Kumar                IT
+Divya Sharma              IT
+Mubeen Ali                IT
+Ravi Iyer                 IT
+Anita Verma               IT
+Kumar Singh               IT
+Meera Nair                IT
+Sameer Khan               IT
+Priya Das                 IT
+John Contractor           IT
+Arun Kumar                HR
+Divya Sharma              HR
+Mubeen Ali                HR
+Ravi Iyer                 HR
+Anita Verma               HR
+Kumar Singh               HR
+Meera Nair                HR
+Sameer Khan               HR
+Priya Das                 HR
+John Contractor           HR
+Arun Kumar                Finance
+Divya Sharma              Finance
+Mubeen Ali                Finance
+Ravi Iyer                 Finance
+Anita Verma               Finance
+Kumar Singh               Finance
+Meera Nair                Finance
+Sameer Khan               Finance
+Priya Das                 Finance
+John Contractor           Finance
+Arun Kumar                Sales
+Divya Sharma              Sales
+Mubeen Ali                Sales
+Ravi Iyer                 Sales
+Anita Verma               Sales
+Kumar Singh               Sales
+Meera Nair                Sales
+Sameer Khan               Sales
+Priya Das                 Sales
+John Contractor           Sales
+Arun Kumar                Support
+Divya Sharma              Support
+Mubeen Ali                Support
+Ravi Iyer                 Support
+Anita Verma               Support
+Kumar Singh               Support
+Meera Nair                Support
+Sameer Khan               Support
+Priya Das                 Support
+John Contractor           Support
+Arun Kumar                RR&D
+Divya Sharma              RR&D
+Mubeen Ali                RR&D
+Ravi Iyer                 RR&D
+Anita Verma               RR&D
+Kumar Singh               RR&D
+Meera Nair                RR&D
+Sameer Khan               RR&D
+Priya Das                 RR&D
+John Contractor           RR&D
+
+60 rows selected.
